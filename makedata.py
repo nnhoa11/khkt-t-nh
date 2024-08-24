@@ -17,10 +17,10 @@ def get_lmList(hand):
 
 
 
-for i in range(0,4):
+for i in range(0,1):
     cap = cv2.VideoCapture(0)
-    detector = HandDetector(detectionCon=0.7, maxHands=1)
-    no_time_step = 2
+    detector = HandDetector(detectionCon=0.7, maxHands=2)
+    no_time_step = 6
     number_of_step = 200
     counts = 0
     lmList = []
@@ -57,8 +57,8 @@ for i in range(0,4):
     if breakSwitch: break
 
     df = pd.DataFrame(lmList)
-    df.to_csv("./pose4-right.txt")
-    data = pd.read_csv("./pose4-right.txt")
+    df.to_csv(f"./gesture3.txt")
+    data = pd.read_csv(f"./gesture3.txt")
     print(data.iloc[:0:].values)
     cap.release()
     cv2.destroyAllWindows()

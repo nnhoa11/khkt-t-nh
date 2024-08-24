@@ -3,8 +3,11 @@ import numpy as np
 import tensorflow as tf
 import cv2
 import mediapipe as mp
+import keras
+# from tensorflow import
+# import keras
 # from HandDetectorModule import HandDetector
-from serial import Serial
+# from serial import Serial
 import imutils
 
 
@@ -75,7 +78,7 @@ class HandDetector:
                     cv2.rectangle(img, (bbox[0] - 20, bbox[1] - 20),
                                   (bbox[0] + bbox[2] + 20, bbox[1] + bbox[3] + 20),
                                   (255, 0, 255), 2)
-                    cv2.putText(img, myHand["type"] + " " + current, (bbox[0] - 30, bbox[1] - 30), cv2.FONT_HERSHEY_PLAIN,
+                    cv2.putText(img, current, (bbox[0] - 30, bbox[1] - 30), cv2.FONT_HERSHEY_PLAIN,
                                 2, (255, 0, 255), 2)
         if draw:
             return allHands, img
@@ -83,13 +86,14 @@ class HandDetector:
             return allHands
 
 
-model = tf.keras.models.load_model("model4.h5")
 
-label = ['pose1', 'pose2', 'pose3', 'pose4']
-label_map = [['pose1', [1,1,1,1,1,1]],
-             ['pose2', [0,0,0,0,0,1]],
-             ['pose3', [1,1,1,1,1,0]],
-             ['pose4', [0,0,0,0,0,0]]]
+model = tf.keras.models.load_model('hackathon_model_1.h5')
+label = ['I love you', 'I', 'Give me my money', 'I want']
+
+label_map = [['I love you', [1,1,1,1,1,1]],
+             ['I', [0,0,0,0,0,1]],
+             ['Give me my money', [1,1,1,1,1,0]],
+             ['I want', [0,0,0,0,0,0]]]
 def get_lmList(hand):
     c_lmlist = []
     # print(hand['lmList'])
@@ -123,15 +127,13 @@ def detect(model, lm_list, type):
     # Use putText() method for
     # inserting text on video
     global current
-    if type == "Left":
-        if current != label_map[result][0]:
-            current = label_map[result][0]
-        s = '$' + str(fingers1[0]) + str(fingers1[1]) + str(fingers1[2]) + str(fingers1[3]) + str(fingers1[4]) + str(fingers1[5]);
-        print(s)
-        # serialcomm.write(s.encode())
-    else: current = ""
+
+    if current != label_map[result][0]:
+        current = label_map[result][0]
+    # serialcomm.write(s.encode())
+
 cap = cv2.VideoCapture(0)
-detector = HandDetector(detectionCon = 0.7, maxHands = 1)
+detector = HandDetector(detectionCon = 0.7, maxHands = 2)
 no_time_step = 2
 number_of_step = 300
 counts  = 0
