@@ -1,4 +1,5 @@
 venv/
 env/
-myenv/
+myvenv/
+logs/
 .DS_Store
